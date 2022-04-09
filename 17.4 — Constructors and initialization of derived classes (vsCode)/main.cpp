@@ -1,6 +1,7 @@
 #include <iostream>
 #include "person.h"
 #include "Inheritance chains.h"
+#include "quiztime.h"
 
 class Base
 {
@@ -98,7 +99,11 @@ int main()
     //Destructors:
 
     //Quiz time!: go see 'Quiz time.h'
+    const Apple a{ "Red delicious", "red", 4.2 };
+    std::cout << a;
 
+    const Banana b{ "Cavendish", "yellow" };    
+    std::cout << b;
 
     return 0;
 }
