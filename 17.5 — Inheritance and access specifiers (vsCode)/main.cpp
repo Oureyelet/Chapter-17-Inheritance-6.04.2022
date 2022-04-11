@@ -124,8 +124,8 @@ int main()
     //Private inheritance:
     ExampleBase anotherExampleBase;
     anotherExampleBase.m_public = 1;// okay: m_public is public in Base
-    anotherExampleBase.m_protected = 2;// not okay: m_protected is protected in Base
-    anotherExampleBase.m_private = 3;// not okay: m_private is private in Base
+    //anotherExampleBase.m_protected = 2;// not okay: m_protected is protected in Base
+    //anotherExampleBase.m_private = 3;// not okay: m_private is private in Base
 
     ExampleDerivedPrivate exampleDerivedPrivate;// Outside access uses the access specifiers of the class being accessed.
     // In this case, the access specifiers of base.
