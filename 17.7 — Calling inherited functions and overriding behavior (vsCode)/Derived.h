@@ -18,10 +18,20 @@ public:
     }
 
     int getValue() const { return m_value; }
+
     void identify() const 
     { 
         Base::identify(); // call Base::identify() first
-        std::cout << "Im a derived!\n"; 
+        std::cout << "Im a derived!\n"; // then identify ourselves
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Derived& b)
+    {
+        out << "In Derived\n";
+        Base u{ b };
+        out << static_cast<const Base&>(b);
+        out << u;
+        return out;
     }
 };
 
