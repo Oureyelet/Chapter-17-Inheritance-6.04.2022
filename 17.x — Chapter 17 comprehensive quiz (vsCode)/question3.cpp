@@ -41,7 +41,7 @@ public:
     }
 
 };
-
+// o !
 class Player: public Creature
 {
 public:
