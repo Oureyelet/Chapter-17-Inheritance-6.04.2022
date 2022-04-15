@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <string_view> 
+#include <array>
 
 class Creature
 {
@@ -63,18 +64,33 @@ public:
 class Monster: public Creature
 {
 public:
-    
     enum class Type
     {
         type_dragon,
         type_orc, 
         type_slime,
         max_types,
-    };  
+    }; 
 
+private:
+    static const Creature& getDefaultCreature(Type type)
+    {
+        static const std::array<Creature, static_cast<std::size_t>(Type::max_types)>monsterData
+        {
+            {
+                { "dragon", 'D', 20, 4, 100 },
+                { "orc", 'o', 4, 2, 25 },
+                { "slime", 's', 1, 1, 10 }
+            }
+        };
+        return monsterData.at(static_cast<std::size_t>(type));
+    }
 
-
-
+public:
+    Monster(const Type& type)
+        : Creature{ getDefaultCreature(type) }
+    {
+    }
 };
 
 std::string ask_for_User_name()
@@ -104,6 +120,11 @@ int main()
 
     Player player1{ ask_for_User_name() };
     std::cout << player1;
+
+    Monster m{ Monster::Type::type_orc };
+    std::cout << "A " << m.getName() << " (" << m.getSymbol() << ") was created.\n"; 
+
+    
 
 
 
