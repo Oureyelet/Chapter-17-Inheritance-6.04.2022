@@ -2,6 +2,9 @@
 #include <string>
 #include <string_view> 
 #include <array>
+#include <random> // for std::mt19937
+#include "random.hpp" // for Random::get(min, max)
+#include <cassert>
 
 class Creature
 {
@@ -72,7 +75,6 @@ public:
         max_types,
     }; 
 
-private:
     static const Creature& getDefaultCreature(Type type)
     {
         static const std::array<Creature, static_cast<std::size_t>(Type::max_types)>monsterData
@@ -84,6 +86,12 @@ private:
             }
         };
         return monsterData.at(static_cast<std::size_t>(type));
+    }
+
+    static Type getRandomMonster()
+    {
+        using Random = effolkronium::random_static;
+        return static_cast<Type>( Random::get(0, (static_cast<int>(Type::max_types)-1) ) );
     }
 
 public:
@@ -103,7 +111,7 @@ std::string ask_for_User_name()
 }
 
 int main()
-{
+{/*
     //check C++ version:
     if (__cplusplus == 201703L) std::cout << "C++17\n";
     else if (__cplusplus == 201402L) std::cout << "C++14\n";
@@ -123,6 +131,12 @@ int main()
 
     Monster m{ Monster::Type::type_orc };
     std::cout << "A " << m.getName() << " (" << m.getSymbol() << ") was created.\n"; 
+*/
+    for(int i{ 0 }; i < 10; ++i)
+    {
+        Monster mr{ Monster::getRandomMonster() };
+        std::cout << "A " << mr.getName() << " (" << mr.getSymbol() << ") was created.\n";
+    }
 
     
 
