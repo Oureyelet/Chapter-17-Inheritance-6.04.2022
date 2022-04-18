@@ -58,8 +58,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, const Player& player)
     {
-        out << "Welcome, " << player.getName() << ".\n";
-        out << "You have " << player.getHp() << " health and are carrying " << player.getGold() << "  gold.\n";
+        out << "Welcome, " << player.getName() << "\n";
+        //out << "You have " << player.getHp() << " health and are carrying " << player.getGold() << "  gold.\n";
         return out;
     }
 };
@@ -79,7 +79,7 @@ public:
     {
         static const std::array<Creature, static_cast<std::size_t>(Type::max_types)>monsterData
         {
-            {
+            {   // name___symbol_hp_damage_ goold
                 { "dragon", 'D', 20, 4, 100 },
                 { "orc", 'o', 4, 2, 25 },
                 { "slime", 's', 1, 1, 10 }
@@ -110,6 +110,47 @@ std::string ask_for_User_name()
     return name;
 }
 
+void fightMonster(Player& player)
+{
+    Monster mr{ Monster::getRandomMonster() };
+    std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n.";
+
+    char run_or_fight{};
+
+    while (player.getHp() > 0 || mr.getHp() > 0 )
+    {
+        std::cout << "(R)un or (F)ight: ";
+        std::cin >> run_or_fight;
+        
+        if(run_or_fight == 'f' || run_or_fight == 'F')
+        {
+            std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage\n.";
+            mr.reduceHealth( player.getAttack() );
+
+                if(player.getAttack() >= mr.getHp())
+                {
+                    std::cout << "You killed the " << mr.getName() << '.\n';
+                    player.levelUp();
+                    player.addGold( mr.getGold() );
+                    
+                    std::cout << "You are now level " << player.getLvl() << '.\n';
+                    std::cout << "You found " << mr.getGold()  << " gold.\n";
+                    break;
+                }
+                else if(mr.getAttack() >= player.getHp())
+                {
+                    std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n;
+                    Too bad you can’t take it with you!
+
+                    std::cout << "The " << mr.getName() << " hit you for " << mr.getAttack() << " damage.\n";
+                    player.reduceHealth( mr.getAttack() );
+                }
+        }
+    
+    
+
+}
+
 int main()
 {/*
     //check C++ version:
@@ -118,25 +159,10 @@ int main()
     else if (__cplusplus == 201103L) std::cout << "C++11\n";
     else if (__cplusplus == 199711L) std::cout << "C++98\n";
     else std::cout << "pre-standard C++\n";
-
-
-    Creature o{ "orc", 'o', 4, 2, 10 };
-    o.addGold(5);
-    o.reduceHealth(1);
-
-    std::cout << "The " << o.getName() << " has " << o.getHp() << " health and is carrying " << o.getGold() << " gold.\n";
+*/
 
     Player player1{ ask_for_User_name() };
     std::cout << player1;
-
-    Monster m{ Monster::Type::type_orc };
-    std::cout << "A " << m.getName() << " (" << m.getSymbol() << ") was created.\n"; 
-*/
-    for(int i{ 0 }; i < 10; ++i)
-    {
-        Monster mr{ Monster::getRandomMonster() };
-        std::cout << "A " << mr.getName() << " (" << mr.getSymbol() << ") was created.\n";
-    }
 
     
 
