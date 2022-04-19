@@ -5,8 +5,12 @@
 #include <random> // for std::mt19937
 #include "random.hpp" // for Random::get(min, max)
 #include <cassert>
+#include <limits> 
 
-//function prototypes:
+//function & class prototypes:
+class Creature;
+class Player;
+class Monster;
 void attackPlayer(Monster& mr, Player& player);
 
 class Creature
@@ -115,15 +119,15 @@ std::string ask_for_User_name()
 
 void attackMonster(Monster& mr, Player& player)
 {
-    std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage\n.";
+    std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage.\n";
 
     if(player.getAttack() >= mr.getHp())
     {
-        std::cout << "You killed the " << mr.getName() << '.\n';
+        std::cout << "You killed the " << mr.getName() << ".\n";
         player.levelUp();
         player.addGold(mr.getGold());
         
-        std::cout << "You are now level " << player.getLvl() << '.\n';
+        std::cout << "You are now level " << player.getLvl() << ".\n";
         std::cout << "You found " << mr.getGold()  << " gold.\n";
         return;
     }
@@ -152,45 +156,37 @@ void attackPlayer(Monster& mr, Player& player)
 
 void fightMonster(Player& player)
 {
-    Monster mr{ Monster::getRandomMonster() };
-    std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n.";
-
-    char run_or_fight{};
-
-    while (player.getHp() > 0 || mr.getHp() > 0 )
+    while (player.getLvl() != 5)
     {
-        std::cout << "(R)un or (F)ight: ";
-        std::cin >> run_or_fight;
-        
-        if(run_or_fight == 'f' || run_or_fight == 'F')
+        Monster mr{ Monster::Type::type_slime };
+        std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
+
+        char run_or_fight{};
+
+        while (player.getHp() > 0)
         {
-            attackMonster(mr, player);
+            std::cout << "(R)un or (F)ight: ";
+            std::cin >> run_or_fight;
+            
+            if(run_or_fight == 'f' || run_or_fight == 'F')
+            {
+                attackMonster(mr, player);
+                break;
+            }
         }
+    }
+    std::cout << "You hit 20lvl you win!" << '\n';
+    std::cout << "Your total gold is " << player.getGold()  <<'\n';  
 }
 
 int main()
 {
-/*
-    //check C++ version:
-    if (__cplusplus == 201703L) std::cout << "C++17\n";
-    else if (__cplusplus == 201402L) std::cout << "C++14\n";
-    else if (__cplusplus == 201103L) std::cout << "C++11\n";
-    else if (__cplusplus == 199711L) std::cout << "C++98\n";
-    else std::cout << "pre-standard C++\n";
-*/
-
+    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    
     Player player1{ ask_for_User_name() };
-    std::cout << player1; 
+    std::cout << player1;
 
-    while (player1.get)
-    {
-        /* code */
-    }
-    
-
-    
-
-
+    fightMonster(player1);
 
     return 0;
 }
