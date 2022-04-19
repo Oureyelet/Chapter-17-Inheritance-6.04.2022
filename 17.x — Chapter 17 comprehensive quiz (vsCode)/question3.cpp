@@ -6,6 +6,9 @@
 #include "random.hpp" // for Random::get(min, max)
 #include <cassert>
 
+//function prototypes:
+void attackPlayer(Monster& mr, Player& player);
+
 class Creature
 {
 protected:
@@ -110,6 +113,43 @@ std::string ask_for_User_name()
     return name;
 }
 
+void attackMonster(Monster& mr, Player& player)
+{
+    std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage\n.";
+
+    if(player.getAttack() >= mr.getHp())
+    {
+        std::cout << "You killed the " << mr.getName() << '.\n';
+        player.levelUp();
+        player.addGold(mr.getGold());
+        
+        std::cout << "You are now level " << player.getLvl() << '.\n';
+        std::cout << "You found " << mr.getGold()  << " gold.\n";
+        return;
+    }
+    else if(player.getAttack() < mr.getHp())
+    {
+        mr.reduceHealth( player.getAttack() );
+        attackPlayer(mr, player);
+        return;
+    }
+
+}
+
+void attackPlayer(Monster& mr, Player& player)
+{
+    if(mr.getAttack() >= player.getHp())
+    {
+        std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
+        std::cout << "Too bad you can’t take it with you!\n";
+
+        std::cout << "The " << mr.getName() << " hit you for " << mr.getAttack() << " damage.\n";
+        player.reduceHealth( mr.getAttack() );
+
+        return;
+    }
+}
+
 void fightMonster(Player& player)
 {
     Monster mr{ Monster::getRandomMonster() };
@@ -124,35 +164,13 @@ void fightMonster(Player& player)
         
         if(run_or_fight == 'f' || run_or_fight == 'F')
         {
-            std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage\n.";
-            mr.reduceHealth( player.getAttack() );
-
-                if(player.getAttack() >= mr.getHp())
-                {
-                    std::cout << "You killed the " << mr.getName() << '.\n';
-                    player.levelUp();
-                    player.addGold( mr.getGold() );
-                    
-                    std::cout << "You are now level " << player.getLvl() << '.\n';
-                    std::cout << "You found " << mr.getGold()  << " gold.\n";
-                    break;
-                }
-                else if(mr.getAttack() >= player.getHp())
-                {
-                    std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n;
-                    Too bad you can’t take it with you!
-
-                    std::cout << "The " << mr.getName() << " hit you for " << mr.getAttack() << " damage.\n";
-                    player.reduceHealth( mr.getAttack() );
-                }
+            attackMonster(mr, player);
         }
-    
-    
-
 }
 
 int main()
-{/*
+{
+/*
     //check C++ version:
     if (__cplusplus == 201703L) std::cout << "C++17\n";
     else if (__cplusplus == 201402L) std::cout << "C++14\n";
@@ -162,7 +180,13 @@ int main()
 */
 
     Player player1{ ask_for_User_name() };
-    std::cout << player1;
+    std::cout << player1; 
+
+    while (player1.get)
+    {
+        /* code */
+    }
+    
 
     
 
