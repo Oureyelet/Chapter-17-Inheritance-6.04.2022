@@ -146,6 +146,7 @@ void attackPlayer(Monster& mr, Player& player)
 
     if(mr.getAttack() >= player.getHp())
     {
+        player.reduceHealth( mr.getAttack() );
         std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
         std::cout << "Too bad you can’t take it with you!\n";
         return;
@@ -161,12 +162,12 @@ void fightMonster(Player& player)
 {
     while (player.getLvl() != 5)
     {
-        Monster mr{ Monster::Type::type_dragon };
+        Monster mr{ Monster::Type::type_slime };
         std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
 
         char run_or_fight{};
 
-        while (player.getHp() > 0)
+        do
         {
             std::cout << "(R)un or (F)ight: ";
             std::cin >> run_or_fight;
@@ -191,10 +192,10 @@ void fightMonster(Player& player)
                     attackPlayer(mr, player);
                 }
             }
-        }
-        std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
-        std::cout << "Too bad you can’t take it with you!\n";
-        break;
+        }while (player.getHp() > 0);
+        //std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
+        //std::cout << "Too bad you can’t take it with you!\n";
+        return;
     }
     std::cout << "You hit 20lvl you win!" << '\n';
     std::cout << "Your total gold is " << player.getGold()  <<'\n';  
