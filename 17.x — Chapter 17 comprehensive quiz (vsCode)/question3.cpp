@@ -142,14 +142,17 @@ void attackMonster(Monster& mr, Player& player)
 
 void attackPlayer(Monster& mr, Player& player)
 {
+    std::cout << "The " << mr.getName() << " hit you for " << mr.getAttack()  << " damage.\n";
+
     if(mr.getAttack() >= player.getHp())
     {
         std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
         std::cout << "Too bad you can’t take it with you!\n";
-
-        std::cout << "The " << mr.getName() << " hit you for " << mr.getAttack() << " damage.\n";
+        return;
+    }
+    else if(mr.getAttack() < player.getHp())
+    {
         player.reduceHealth( mr.getAttack() );
-
         return;
     }
 }
@@ -158,7 +161,7 @@ void fightMonster(Player& player)
 {
     while (player.getLvl() != 5)
     {
-        Monster mr{ Monster::Type::type_slime };
+        Monster mr{ Monster::Type::type_dragon };
         std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
 
         char run_or_fight{};
@@ -171,12 +174,31 @@ void fightMonster(Player& player)
             if(run_or_fight == 'f' || run_or_fight == 'F')
             {
                 attackMonster(mr, player);
-                break;
+            }
+            else if(run_or_fight == 'r' || run_or_fight == 'R')
+            {
+                using Random = effolkronium::random_static;
+                int run{ Random::get(0, 1) };
+
+                if(run == 0)
+                {
+                    std::cout << "You successfully fled.\n";
+                    break;
+                }
+                else if( run == 1 )
+                {
+                    std::cout << "You failed to flee.\n";
+                    attackPlayer(mr, player);
+                }
             }
         }
+        std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
+        std::cout << "Too bad you can’t take it with you!\n";
+        break;
     }
     std::cout << "You hit 20lvl you win!" << '\n';
     std::cout << "Your total gold is " << player.getGold()  <<'\n';  
+    return;
 }
 
 int main()
