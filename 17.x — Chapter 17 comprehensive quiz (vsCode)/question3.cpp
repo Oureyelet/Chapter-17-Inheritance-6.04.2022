@@ -211,5 +211,21 @@ int main()
 
     fightMonster(player1);
 
+    /*
+    Enter your name: h
+Welcome, h
+You have encountered a slime (s)
+(R)un or (F)ight: r
+You failed to flee.
+The slime hit you for 1 damage.
+(R)un or (F)ight: r
+You failed to flee.
+The slime hit you for 1 damage.
+(R)un or (F)ight: r
+You successfully fled.
+
++ why line 163 dont finish program when i hit 5 lvl ?
+    */
+
     return 0;
 }
