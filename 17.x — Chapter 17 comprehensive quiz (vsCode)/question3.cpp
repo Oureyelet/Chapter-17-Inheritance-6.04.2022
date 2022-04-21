@@ -123,6 +123,7 @@ void attackMonster(Monster& mr, Player& player)
 
     if(player.getAttack() >= mr.getHp())
     {
+        mr.reduceHealth( player.getAttack() );
         std::cout << "You killed the " << mr.getName() << ".\n";
         player.levelUp();
         player.addGold(mr.getGold());
@@ -131,13 +132,8 @@ void attackMonster(Monster& mr, Player& player)
         std::cout << "You found " << mr.getGold()  << " gold.\n";
         return;
     }
-    else if(player.getAttack() < mr.getHp())
-    {
-        mr.reduceHealth( player.getAttack() );
-        attackPlayer(mr, player);
-        return;
-    }
 
+    mr.reduceHealth( player.getAttack() );
 }
 
 void attackPlayer(Monster& mr, Player& player)
@@ -151,55 +147,69 @@ void attackPlayer(Monster& mr, Player& player)
         std::cout << "Too bad you can’t take it with you!\n";
         return;
     }
-    else if(mr.getAttack() < player.getHp())
-    {
-        player.reduceHealth( mr.getAttack() );
-        return;
-    }
+
+    player.reduceHealth( mr.getAttack() );
 }
 
 void fightMonster(Player& player)
 {
-    while (player.getLvl() != 5)
+    label:
+
+    Monster mr{ Monster::getRandomMonster() };
+    std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
+
+    while (mr.getHp() > 0)
     {
-        Monster mr{ Monster::Type::type_slime };
-        std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
-
         char run_or_fight{};
-
-        do
+        
+        std::cout << "(R)un or (F)ight: ";
+        std::cin >> run_or_fight;
+        
+        if(run_or_fight == 'f' || run_or_fight == 'F')
         {
-            std::cout << "(R)un or (F)ight: ";
-            std::cin >> run_or_fight;
+            attackMonster(mr, player);
             
-            if(run_or_fight == 'f' || run_or_fight == 'F')
+            if(player.getAttack() < mr.getHp())
             {
-                attackMonster(mr, player);
-            }
-            else if(run_or_fight == 'r' || run_or_fight == 'R')
-            {
-                using Random = effolkronium::random_static;
-                int run{ Random::get(0, 1) };
+                attackPlayer(mr, player);
 
-                if(run == 0)
+                if(mr.getAttack() < player.getHp())
                 {
-                    std::cout << "You successfully fled.\n";
-                    break;
-                }
-                else if( run == 1 )
-                {
-                    std::cout << "You failed to flee.\n";
-                    attackPlayer(mr, player);
+                    return;
                 }
             }
-        }while (player.getHp() > 0);
-        //std::cout << "You died at level " << player.getLvl() << " and with " << player.getGold() << " gold.\n";
-        //std::cout << "Too bad you can’t take it with you!\n";
-        return;
+        }
+        else if(run_or_fight == 'r' || run_or_fight == 'R')
+        {
+            using Random = effolkronium::random_static;
+            int run{ Random::get(0, 1) };
+
+            if(run == 0)
+            {
+                std::cout << "You successfully fled.\n";
+                //goto label; // exit loop and go back to begining of fightMonster() function. 
+                return;
+            }
+            else if( run == 1 )
+            {
+                std::cout << "You failed to flee.\n";
+
+                if(player.getHp() <= 0)
+                {
+                    return;
+                }
+                
+                attackPlayer(mr, player);
+
+                if(player.getHp() <= 0)
+                {
+                    return;
+                }
+            }
+        }
     }
-    std::cout << "You hit 20lvl you win!" << '\n';
-    std::cout << "Your total gold is " << player.getGold()  <<'\n';  
-    return;
+
+    
 }
 
 int main()
@@ -209,23 +219,23 @@ int main()
     Player player1{ ask_for_User_name() };
     std::cout << player1;
 
-    fightMonster(player1);
 
-    /*
-    Enter your name: h
-Welcome, h
-You have encountered a slime (s)
-(R)un or (F)ight: r
-You failed to flee.
-The slime hit you for 1 damage.
-(R)un or (F)ight: r
-You failed to flee.
-The slime hit you for 1 damage.
-(R)un or (F)ight: r
-You successfully fled.
+    while (player1.getLvl() < 20 || player1.getHp() >= 0)
+    {
+        fightMonster(player1);
+    }
 
-+ why line 163 dont finish program when i hit 5 lvl ?
-    */
+    if(player1.getLvl() >= 20)
+    {
+        std::cout << "You hit lvl 20 you win!" << '\n';
+        std::cout << "Your total gold is " << player1.getGold()  <<'\n';
+    }
+    else if(player1.getHp() >= 0)
+    {
+        std::cout << "You died at level " << player1.getLvl() << " and with " << player1.getGold() << " gold.\n";
+        std::cout << "Too bad you can’t take it with you!\n";
+    }
+    
 
     return 0;
 }
