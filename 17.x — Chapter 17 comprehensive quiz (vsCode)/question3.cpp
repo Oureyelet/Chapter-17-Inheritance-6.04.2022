@@ -130,10 +130,14 @@ void attackMonster(Monster& mr, Player& player)
         
         std::cout << "You are now level " << player.getLvl() << ".\n";
         std::cout << "You found " << mr.getGold()  << " gold.\n";
+
+        std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
         return;
     }
 
     mr.reduceHealth( player.getAttack() );
+
+    std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
 }
 
 void attackPlayer(Monster& mr, Player& player)
@@ -149,16 +153,16 @@ void attackPlayer(Monster& mr, Player& player)
     }
 
     player.reduceHealth( mr.getAttack() );
+
+    std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
 }
 
 void fightMonster(Player& player)
 {
-    label:
-
     Monster mr{ Monster::getRandomMonster() };
     std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
 
-    while (mr.getHp() > 0)
+    while (mr.getHp() > 0 && player.getHp() > 0)
     {
         char run_or_fight{};
         
@@ -172,11 +176,6 @@ void fightMonster(Player& player)
             if(player.getAttack() < mr.getHp())
             {
                 attackPlayer(mr, player);
-
-                if(mr.getAttack() < player.getHp())
-                {
-                    return;
-                }
             }
         }
         else if(run_or_fight == 'r' || run_or_fight == 'R')
@@ -220,7 +219,7 @@ int main()
     std::cout << player1;
 
 
-    while (player1.getLvl() < 20 || player1.getHp() >= 0)
+    while (player1.getLvl() < 20 && player1.getHp() > 0)
     {
         fightMonster(player1);
     }
@@ -230,12 +229,33 @@ int main()
         std::cout << "You hit lvl 20 you win!" << '\n';
         std::cout << "Your total gold is " << player1.getGold()  <<'\n';
     }
-    else if(player1.getHp() >= 0)
-    {
-        std::cout << "You died at level " << player1.getLvl() << " and with " << player1.getGold() << " gold.\n";
-        std::cout << "Too bad you can’t take it with you!\n";
-    }
-    
+
+    /*
+    Enter your name: mati
+Welcome, mati
+You have encountered a dragon (D)
+(R)un or (F)ight: r
+You failed to flee.
+The dragon hit you for 4 damage.
+(Players info) HP: 6 ATTACK: 1 GOLD: 0
+(R)un or (F)ight: r
+You successfully fled.
+You have encountered a orc (o)
+(R)un or (F)ight: f
+You hit the orc for 1 damage.
+(Players info) HP: 6 ATTACK: 1 GOLD: 0
+The orc hit you for 2 damage.
+(Players info) HP: 4 ATTACK: 1 GOLD: 0
+(R)un or (F)ight: f
+You hit the orc for 1 damage.
+(Players info) HP: 4 ATTACK: 1 GOLD: 0
+The orc hit you for 2 damage.
+(Players info) HP: 2 ATTACK: 1 GOLD: 0
+(R)un or (F)ight: f
+You hit the orc for 1 damage.
+(Players info) HP: 2 ATTACK: 1 GOLD: 0
+(R)un or (F)ight: 
+    */
 
     return 0;
 }
