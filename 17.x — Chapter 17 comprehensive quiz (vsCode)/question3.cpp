@@ -8,10 +8,10 @@
 #include <limits> 
 
 //function & class prototypes:
-class Creature;
-class Player;
-class Monster;
-void attackPlayer(Monster& mr, Player& player);
+//class Creature;
+//class Player;
+//class Monster;
+//void attackPlayer(Monster& mr, Player& player);
 
 class Creature
 {
@@ -132,12 +132,14 @@ void attackMonster(Monster& mr, Player& player)
         std::cout << "You found " << mr.getGold()  << " gold.\n";
 
         std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
+        std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
         return;
     }
 
     mr.reduceHealth( player.getAttack() );
 
     std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
+   std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
 }
 
 void attackPlayer(Monster& mr, Player& player)
@@ -155,6 +157,7 @@ void attackPlayer(Monster& mr, Player& player)
     player.reduceHealth( mr.getAttack() );
 
     std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
+    std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
 }
 
 void fightMonster(Player& player)
@@ -175,7 +178,7 @@ void fightMonster(Player& player)
         {
             attackMonster(mr, player);
             
-            if(player.getAttack() <= mr.getHp())
+            if(player.getAttack() <= mr.getHp() || mr.getHp() > 0)
             {
                 attackPlayer(mr, player);
             }
@@ -214,12 +217,9 @@ void fightMonster(Player& player)
 }
 
 int main()
-{
-    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-    
+{   
     Player player1{ ask_for_User_name() };
     std::cout << player1;
-
 
     while (player1.getLvl() < 20 && player1.getHp() > 0)
     {
@@ -231,27 +231,5 @@ int main()
         std::cout << "You hit lvl 20 you win!" << '\n';
         std::cout << "Your total gold is " << player1.getGold()  <<'\n';
     }
-
-    /*
-    -----------------------------------------
-You have encountered a orc (o)
------------------------------------------
-(R)un or (F)ight: f
-You hit the orc for 9 damage.
-You killed the orc.
-You are now level 10.
-You found 25 gold.
-(Players info) HP: 2 ATTACK: 10 GOLD: 165
------------------------------------------
-You have encountered a dragon (D)
------------------------------------------
-(R)un or (F)ight: f
-You hit the dragon for 10 damage.
-(Players info) HP: 2 ATTACK: 10 GOLD: 165
-The dragon hit you for 4 damage.
-You died at level 10 and with 165 gold.
-Too bad you can’t take it with you!
-    */
-
     return 0;
 }
