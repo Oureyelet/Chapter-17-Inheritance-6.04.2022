@@ -4,14 +4,7 @@
 #include <array>
 #include <random> // for std::mt19937
 #include "random.hpp" // for Random::get(min, max)
-#include <cassert>
 #include <limits> 
-
-//function & class prototypes:
-//class Creature;
-//class Player;
-//class Monster;
-//void attackPlayer(Monster& mr, Player& player);
 
 class Creature
 {
@@ -66,7 +59,6 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Player& player)
     {
         out << "Welcome, " << player.getName() << "\n";
-        //out << "You have " << player.getHp() << " health and are carrying " << player.getGold() << "  gold.\n";
         return out;
     }
 };
@@ -191,7 +183,6 @@ void fightMonster(Player& player)
             if(run == 0)
             {
                 std::cout << "You successfully fled.\n";
-                //goto label; // exit loop and go back to begining of fightMonster() function. 
                 return;
             }
             else if( run == 1 )
@@ -226,7 +217,7 @@ int main()
         fightMonster(player1);
     }
 
-    if(player1.getLvl() >= 20)
+    if(player1.hasWon())
     {
         std::cout << "You hit lvl 20 you win!" << '\n';
         std::cout << "Your total gold is " << player1.getGold()  <<'\n';
