@@ -160,12 +160,14 @@ void attackPlayer(Monster& mr, Player& player)
 void fightMonster(Player& player)
 {
     Monster mr{ Monster::getRandomMonster() };
+    std::cout << "-----------------------------------------" << '\n';
     std::cout << "You have encountered a " << mr.getName() << " (" << mr.getSymbol() << ")\n";
 
     while (mr.getHp() > 0 && player.getHp() > 0)
     {
         char run_or_fight{};
         
+        std::cout << "-----------------------------------------" << '\n';
         std::cout << "(R)un or (F)ight: ";
         std::cin >> run_or_fight;
         
@@ -173,7 +175,7 @@ void fightMonster(Player& player)
         {
             attackMonster(mr, player);
             
-            if(player.getAttack() < mr.getHp())
+            if(player.getAttack() <= mr.getHp())
             {
                 attackPlayer(mr, player);
             }
@@ -231,30 +233,24 @@ int main()
     }
 
     /*
-    Enter your name: mati
-Welcome, mati
-You have encountered a dragon (D)
-(R)un or (F)ight: r
-You failed to flee.
-The dragon hit you for 4 damage.
-(Players info) HP: 6 ATTACK: 1 GOLD: 0
-(R)un or (F)ight: r
-You successfully fled.
+    -----------------------------------------
 You have encountered a orc (o)
+-----------------------------------------
 (R)un or (F)ight: f
-You hit the orc for 1 damage.
-(Players info) HP: 6 ATTACK: 1 GOLD: 0
-The orc hit you for 2 damage.
-(Players info) HP: 4 ATTACK: 1 GOLD: 0
+You hit the orc for 9 damage.
+You killed the orc.
+You are now level 10.
+You found 25 gold.
+(Players info) HP: 2 ATTACK: 10 GOLD: 165
+-----------------------------------------
+You have encountered a dragon (D)
+-----------------------------------------
 (R)un or (F)ight: f
-You hit the orc for 1 damage.
-(Players info) HP: 4 ATTACK: 1 GOLD: 0
-The orc hit you for 2 damage.
-(Players info) HP: 2 ATTACK: 1 GOLD: 0
-(R)un or (F)ight: f
-You hit the orc for 1 damage.
-(Players info) HP: 2 ATTACK: 1 GOLD: 0
-(R)un or (F)ight: 
+You hit the dragon for 10 damage.
+(Players info) HP: 2 ATTACK: 10 GOLD: 165
+The dragon hit you for 4 damage.
+You died at level 10 and with 165 gold.
+Too bad you can’t take it with you!
     */
 
     return 0;
