@@ -5,6 +5,63 @@
 #include <random> // for std::mt19937
 #include "random.hpp" // for Random::get(min, max)
 #include <limits> 
+#include <utility> // for std::pair
+
+class Potion
+{
+protected:
+    const std::string m_size_Small{ "Small" };
+    const std::string m_size_Medium{ "Medium" };
+    const std::string m_size_Large{ "Large" };
+
+    enum class Type
+    {
+        type_health,
+        type_strenght,
+        type_posion,
+        max_type,
+    };
+
+public:
+    Potion() = default;
+
+    std::string getPotionName(Type& type)
+    {
+        switch (type)
+        {
+        case Type::type_health: return "Health"; break;
+        case Type::type_strenght: return "Strenght"; break;
+        case Type::type_posion: return "Poison"; break;
+        
+        default: return "Something went wrong ####????"; break;
+        }
+    }
+
+    static Type getRandomPotionType()
+    {
+        using Random = effolkronium::random_static;
+        return static_cast<Type>( Random::get(0, (static_cast<int>(Type::max_type)-1) ) );
+    }
+
+    std::string getRandomPotionSize()
+    {
+        using Random = effolkronium::random_static;
+        int nr{ Random::get(1, 3) };
+
+        if(nr == 1)
+        {
+            return m_size_Small;
+        }
+        else if(nr == 2)
+        {
+            return m_size_Medium;
+        }
+        else if(nr == 3)
+        {
+            return m_size_Large;
+        }
+    }
+};
 
 class Creature
 {
@@ -36,7 +93,7 @@ public:
     void addGold(int gold){ m_gold += gold; }
 };
 
-class Player: public Creature
+class Player: public Creature, public Potion
 {
 private:
     int m_lvl{ 1 };
@@ -61,18 +118,50 @@ public:
         out << "Welcome, " << player.getName() << "\n";
         return out;
     }
+
+    int dringPotion(Player& player)
+    {
+        Potion potion;
+        Type type{ potion.getRandomPotionType() };
+        std::string size{ potion.getRandomPotionSize() };
+
+        if(type == Type::type_health && size == m_size_Small)
+        {
+            return ++player.m_health;
+        }
+        else if(type == Type::type_health && size == m_size_Medium)
+        {
+            return ++player.m_health;
+        }
+        else if(type == Type::type_health && size == m_size_Large)
+        {
+            return player.m_health + 5;
+        }
+        else if(type == Type::type_strenght && size == m_size_Small)
+        {
+            return player.m_health + 5;
+        }
+
+
+    }
 };
 
 class Monster: public Creature
 {
-public:
+private:
     enum class Type
     {
         type_dragon,
         type_orc, 
         type_slime,
         max_types,
-    }; 
+    };
+
+public:
+    Monster(const Type& type)
+        : Creature{ getDefaultCreature(type) }
+    {
+    }
 
     static const Creature& getDefaultCreature(Type type)
     {
@@ -91,12 +180,6 @@ public:
     {
         using Random = effolkronium::random_static;
         return static_cast<Type>( Random::get(0, (static_cast<int>(Type::max_types)-1) ) );
-    }
-
-public:
-    Monster(const Type& type)
-        : Creature{ getDefaultCreature(type) }
-    {
     }
 };
 
@@ -131,7 +214,7 @@ void attackMonster(Monster& mr, Player& player)
     mr.reduceHealth( player.getAttack() );
 
     std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
-   std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
+    std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
 }
 
 void attackPlayer(Monster& mr, Player& player)
@@ -203,8 +286,6 @@ void fightMonster(Player& player)
             }
         }
     }
-
-    
 }
 
 int main()
@@ -222,5 +303,13 @@ int main()
         std::cout << "You hit lvl 20 you win!" << '\n';
         std::cout << "Your total gold is " << player1.getGold()  <<'\n';
     }
+
+
+
+
+
+    Potion df;
+
+
     return 0;
 }
