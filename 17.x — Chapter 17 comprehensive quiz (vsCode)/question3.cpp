@@ -60,6 +60,8 @@ public:
         {
             return m_size_Large;
         }
+
+        return "yo";
     }
 };
 
@@ -127,11 +129,11 @@ public:
 
         if(type == Type::type_health && size == m_size_Small)
         {
-            return ++player.m_health;
+            return player.m_health + 2;
         }
         else if(type == Type::type_health && size == m_size_Medium)
         {
-            return ++player.m_health;
+            return player.m_health + 2;
         }
         else if(type == Type::type_health && size == m_size_Large)
         {
@@ -139,10 +141,43 @@ public:
         }
         else if(type == Type::type_strenght && size == m_size_Small)
         {
-            return player.m_health + 5;
+            return ++player.m_damage;
+        }
+        else if(type == Type::type_strenght && size == m_size_Medium)
+        {
+            return ++player.m_damage;
+        }
+        else if(type == Type::type_strenght && size == m_size_Large)
+        {
+            return ++player.m_damage;
+        }
+        else if(type == Type::type_posion && size == m_size_Small)
+        {
+            return --player.m_health;
+        }
+        else if(type == Type::type_posion && size == m_size_Medium)
+        {
+            return --player.m_health;
+        }
+        else if(type == Type::type_posion && size == m_size_Large)
+        {
+            return --player.m_health;
         }
 
+        return 0;
+    }
 
+    int getRandomPotion(Player& player)
+    {
+        using Random = effolkronium::random_static;
+        int nr{ Random::get(1, 3) };
+
+        if(nr == 3)
+        {
+            return dringPotion(player);
+        }
+
+        return 0;
     }
 };
 
@@ -194,6 +229,8 @@ std::string ask_for_User_name()
 
 void attackMonster(Monster& mr, Player& player)
 {
+    char answer{};
+
     std::cout << "You hit the " << mr.getName() << " for " << player.getAttack() << " damage.\n";
 
     if(player.getAttack() >= mr.getHp())
@@ -205,9 +242,18 @@ void attackMonster(Monster& mr, Player& player)
         
         std::cout << "You are now level " << player.getLvl() << ".\n";
         std::cout << "You found " << mr.getGold()  << " gold.\n";
+        std::cout << "You found a mythical potion! Do you want to drink it? [y/n]: ";
+        std::cin >> answer;
 
-        std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
-        std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';
+        if( answer == 'y' || answer == 'Y' )
+        {
+            player.getRandomPotion(player);
+        }
+        else if( answer == 'n' || answer == 'N' )
+        {
+            std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
+            std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';   
+        }
         return;
     }
 
