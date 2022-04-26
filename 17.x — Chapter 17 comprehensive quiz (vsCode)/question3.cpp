@@ -10,9 +10,6 @@
 class Potion
 {
 protected:
-    const std::string m_size_Small{ "Small" };
-    const std::string m_size_Medium{ "Medium" };
-    const std::string m_size_Large{ "Large" };
 
     enum class Type
     {
@@ -24,18 +21,6 @@ protected:
 
 public:
     Potion() = default;
-
-    std::string getPotionName(Type& type)
-    {
-        switch (type)
-        {
-        case Type::type_health: return "Health"; break;
-        case Type::type_strenght: return "Strenght"; break;
-        case Type::type_posion: return "Poison"; break;
-        
-        default: return "Something went wrong ####????"; break;
-        }
-    }
 
     static Type getRandomPotionType()
     {
@@ -50,15 +35,15 @@ public:
 
         if(nr == 1)
         {
-            return m_size_Small;
+            return "Small";
         }
         else if(nr == 2)
         {
-            return m_size_Medium;
+            return "Medium";
         }
         else if(nr == 3)
         {
-            return m_size_Large;
+            return "Large";
         }
 
         return "yo";
@@ -127,47 +112,47 @@ public:
         Type type{ potion.getRandomPotionType() };
         std::string size{ potion.getRandomPotionSize() };
 
-        if(type == Type::type_health && size == m_size_Small)
+        if(type == Type::type_health && size == "Small")
         {
             std::cout << "You drank a Small potion of Health.\n";
             return player.m_health + 2;
         }
-        else if(type == Type::type_health && size == m_size_Medium)
+        else if(type == Type::type_health && size == "Medium")
         {
             std::cout << "You drank a Medium potion of Health.\n";
             return player.m_health + 2;
         }
-        else if(type == Type::type_health && size == m_size_Large)
+        else if(type == Type::type_health && size == "Large")
         {
             std::cout << "You drank a Large potion of Health.\n";
             return player.m_health + 5;
         }
-        else if(type == Type::type_strenght && size == m_size_Small)
+        else if(type == Type::type_strenght && size == "Small")
         {
             std::cout << "You drank a Small potion of Strenght.\n";
             return ++player.m_damage;
         }
-        else if(type == Type::type_strenght && size == m_size_Medium)
+        else if(type == Type::type_strenght && size == "Medium")
         {
             std::cout << "You drank a Madium potion of Strenght.\n";
             return ++player.m_damage;
         }
-        else if(type == Type::type_strenght && size == m_size_Large)
+        else if(type == Type::type_strenght && size == "Large")
         {
             std::cout << "You drank a Large potion of Strenght.\n";
             return ++player.m_damage;
         }
-        else if(type == Type::type_posion && size == m_size_Small)
+        else if(type == Type::type_posion && size == "Small")
         {
             std::cout << "You drank a Small potion of Poison.\n";
             return --player.m_health;
         }
-        else if(type == Type::type_posion && size == m_size_Medium)
+        else if(type == Type::type_posion && size == "Medium")
         {
             std::cout << "You drank a Medium potion of Poison.\n";
             return --player.m_health;
         }
-        else if(type == Type::type_posion && size == m_size_Large)
+        else if(type == Type::type_posion && size == "Large")
         {
             std::cout << "You drank a Large potion of Poison.\n";
             return --player.m_health;
