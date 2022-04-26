@@ -129,38 +129,47 @@ public:
 
         if(type == Type::type_health && size == m_size_Small)
         {
+            std::cout << "You drank a Small potion of Health.\n";
             return player.m_health + 2;
         }
         else if(type == Type::type_health && size == m_size_Medium)
         {
+            std::cout << "You drank a Medium potion of Health.\n";
             return player.m_health + 2;
         }
         else if(type == Type::type_health && size == m_size_Large)
         {
+            std::cout << "You drank a Large potion of Health.\n";
             return player.m_health + 5;
         }
         else if(type == Type::type_strenght && size == m_size_Small)
         {
+            std::cout << "You drank a Small potion of Strenght.\n";
             return ++player.m_damage;
         }
         else if(type == Type::type_strenght && size == m_size_Medium)
         {
+            std::cout << "You drank a Madium potion of Strenght.\n";
             return ++player.m_damage;
         }
         else if(type == Type::type_strenght && size == m_size_Large)
         {
+            std::cout << "You drank a Large potion of Strenght.\n";
             return ++player.m_damage;
         }
         else if(type == Type::type_posion && size == m_size_Small)
         {
+            std::cout << "You drank a Small potion of Poison.\n";
             return --player.m_health;
         }
         else if(type == Type::type_posion && size == m_size_Medium)
         {
+            std::cout << "You drank a Medium potion of Poison.\n";
             return --player.m_health;
         }
         else if(type == Type::type_posion && size == m_size_Large)
         {
+            std::cout << "You drank a Large potion of Poison.\n";
             return --player.m_health;
         }
 
@@ -172,11 +181,23 @@ public:
         using Random = effolkronium::random_static;
         int nr{ Random::get(1, 3) };
 
+        char answer{};
+
         if(nr == 3)
         {
-            return dringPotion(player);
-        }
+            std::cout << "You found a mythical potion! Do you want to drink it? [y/n]: ";
+            std::cin >> answer;
 
+            if( answer == 'y' || answer == 'Y' )
+            {
+                return player.dringPotion(player);
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
         return 0;
     }
 };
@@ -242,18 +263,12 @@ void attackMonster(Monster& mr, Player& player)
         
         std::cout << "You are now level " << player.getLvl() << ".\n";
         std::cout << "You found " << mr.getGold()  << " gold.\n";
-        std::cout << "You found a mythical potion! Do you want to drink it? [y/n]: ";
-        std::cin >> answer;
-
-        if( answer == 'y' || answer == 'Y' )
-        {
-            player.getRandomPotion(player);
-        }
-        else if( answer == 'n' || answer == 'N' )
-        {
-            std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
-            std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';   
-        }
+        
+        player.getRandomPotion(player);
+        
+        std::cout << "(Players info) HP: " << player.getHp() << " ATTACK: " << player.getAttack() << " GOLD: " << player.getGold() << '\n';
+        std::cout << "(Monster info) HP: " << mr.getHp() << " ATTACK: " << mr.getAttack() << " GOLD: " << mr.getGold() << '\n';   
+       
         return;
     }
 
@@ -349,13 +364,6 @@ int main()
         std::cout << "You hit lvl 20 you win!" << '\n';
         std::cout << "Your total gold is " << player1.getGold()  <<'\n';
     }
-
-
-
-
-
-    Potion df;
-
 
     return 0;
 }
